@@ -1,0 +1,35 @@
+package com.luna.school.entite;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.UUID;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+/**
+ * <p> {@link  } .</p>
+ *
+ * @Project school
+ * @Author BOUA YVES 2024-06-21 10:12 p.m..
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity
+@Table(name = "permission-personnel")
+public class PermissionPersonnelTable {
+
+  @Id
+  private UUID id;
+  private LocalDate dateDebut;
+  private LocalDate dateFin;
+  private String description;
+  @ManyToOne
+  @JoinColumn(name = "personnel_id", nullable = false)
+  private PersonnelTable personnel;
+}
