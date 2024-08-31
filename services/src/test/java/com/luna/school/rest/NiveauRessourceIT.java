@@ -66,7 +66,7 @@ public class NiveauRessourceIT extends AbstractRessourceIT {
     commande.setMontantScolarite(BigDecimal.valueOf(300.000));
 
     // When
-    var mvcResult = this.mockMvc.perform(post(API_URL+"/payer")
+    var mvcResult = this.mockMvc.perform(post(API_URL+"/creer")
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .content(TestUtils.convertObjectToJsonBytes(commande))
         .contentType(MediaType.APPLICATION_JSON)).andDo(print());

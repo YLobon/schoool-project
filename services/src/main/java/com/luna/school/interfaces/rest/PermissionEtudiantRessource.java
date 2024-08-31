@@ -6,6 +6,7 @@ import com.luna.school.interfaces.facade.usecase.PermissionEtudiantUseCaseFacade
 import com.luna.school.permission.application.commande.CreerPermissionEleveCommande;
 import com.luna.school.permission.application.commande.ModifierPermissionEleveCommande;
 import com.luna.school.permission.application.vm.PermissionEtudiantVM;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -38,27 +39,27 @@ public class PermissionEtudiantRessource {
     this.permissionEtudiantQueryFacade = permissionEtudiantQueryFacade;
   }
 
-
+  @Operation(summary = "Lister les permission des etudiants")
   @GetMapping("/lister")
   public ResponseEntity<List<PermissionEtudiantVM>> lister() {
     List<PermissionEtudiantVM> permissionPersonnelVMS = this.permissionEtudiantQueryFacade.lister();
     return ResponseEntity.ok(permissionPersonnelVMS);
   }
 
+  @Operation(summary = "recuperer permission d'etudiant par id")
   @GetMapping("/{id}")
   public ResponseEntity<PermissionEtudiantVM> recupererParId(@PathVariable UUID id) {
-
     PermissionEtudiantVM permissionEtudiantVM = this
         .permissionEtudiantQueryFacade.recupererParId(id);
     return ResponseEntity.ok(permissionEtudiantVM);
   }
 
-//  @DeleteMapping("supprimer/{id}")
+  //  @DeleteMapping("supprimer/{id}")
 //  @ResponseStatus(HttpStatus.OK)
 //  void supprimer(@PathVariable @Valid UUID id) {
 //    this.anneeScolaireUseCaseFacade.supprimer(id);
 //  }
-
+  @Operation(summary = "creer les permissions d'étudiant")
   @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerPermissionEleveCommande commande) {
@@ -70,6 +71,7 @@ public class PermissionEtudiantRessource {
    *
    * @param commande commande modification d'un utilisateur connecté.
    */
+  @Operation(summary = "modifier permission d'etudiant")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifierPermissionEleveCommande commande) {
     this.permissionEtudiantUseCaseFacade.modifier(commande);

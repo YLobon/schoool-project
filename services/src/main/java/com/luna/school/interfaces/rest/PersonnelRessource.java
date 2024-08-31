@@ -7,6 +7,7 @@ import com.luna.school.personnel.application.commande.CreerPersonnelCommande;
 import com.luna.school.personnel.application.commande.ModifierPersonnelCommande;
 import com.luna.school.personnel.application.vm.PersonnelDetailVM;
 import com.luna.school.personnel.application.vm.PersonnelEssentielVM;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -29,8 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/luna/scolaire/personnel")
 public class PersonnelRessource {
-private final PersonnelUseCaseFacade personnelUseCaseFacade;
-private final PersonnelQueryFacade personnelQueryFacade;
+
+  private final PersonnelUseCaseFacade personnelUseCaseFacade;
+  private final PersonnelQueryFacade personnelQueryFacade;
 
   public PersonnelRessource(PersonnelUseCaseFacade personnelUseCaseFacade,
       PersonnelQueryFacade personnelQueryFacade) {
@@ -38,12 +40,14 @@ private final PersonnelQueryFacade personnelQueryFacade;
     this.personnelQueryFacade = personnelQueryFacade;
   }
 
+  @Operation(summary = "Lister les personnels")
   @GetMapping("/lister")
   public ResponseEntity<List<PersonnelEssentielVM>> lister() {
     List<PersonnelEssentielVM> personnelEssentielVMList = this.personnelQueryFacade.lister();
     return ResponseEntity.ok(personnelEssentielVMList);
   }
 
+  @Operation(summary = "recuperer le personnel par id")
   @GetMapping("/{id}")
   public ResponseEntity<PersonnelDetailVM> recupererParId(@PathVariable UUID id) {
     PersonnelDetailVM personnelDetailVM =
@@ -51,18 +55,21 @@ private final PersonnelQueryFacade personnelQueryFacade;
     return ResponseEntity.ok(personnelDetailVM);
   }
 
+  @Operation(summary = "supprimer un personnel")
   @DeleteMapping("supprimer/{id}")
   @ResponseStatus(HttpStatus.OK)
   void supprimer(@PathVariable @Valid UUID id) {
     this.personnelUseCaseFacade.supprimer(id);
   }
 
-  @PostMapping("/payer")
+  @Operation(summary = "Creer un personnel")
+  @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerPersonnelCommande commande) {
     this.personnelUseCaseFacade.creer(commande);
   }
 
+  @Operation(summary = "modifier un personnel")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifierPersonnelCommande commande) {
     this.personnelUseCaseFacade.modifier(commande);

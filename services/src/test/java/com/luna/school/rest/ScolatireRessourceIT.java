@@ -71,7 +71,7 @@ public class ScolatireRessourceIT extends AbstractRessourceIT {
     commande.setEtudiantId(etudiantId);
     commande.setMontantVerset(BigDecimal.valueOf(60_000.0));
     // When
-    var mvcResult = this.mockMvc.perform(post(API_URL + "/payer-scolarite")
+    var mvcResult = this.mockMvc.perform(post(API_URL + "/creer-scolarite")
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .content(TestUtils.convertObjectToJsonBytes(commande))
         .contentType(MediaType.APPLICATION_JSON)).andDo(print());

@@ -3,7 +3,7 @@ package com.luna.school.enumeration;
 /**
  * <p>Représente la civilité d'une personne physique.</p>
  *
- * @author BOUA YVEs
+ * @author BOUA YVES
  */
 public enum Civilite {
 

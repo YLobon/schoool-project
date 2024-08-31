@@ -7,6 +7,7 @@ import com.luna.school.matiere.application.commande.CreerSousMatiereComande;
 import com.luna.school.matiere.application.commande.ModifierSousMatierCommande;
 import com.luna.school.matiere.application.vm.SousMatiereDetailVM;
 import com.luna.school.matiere.application.vm.SousMatiereEssentielVM;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -39,26 +40,29 @@ public class SousMatiereRessource {
     this.sousMatiereQueryFacade = sousMatiereQueryFacade;
   }
 
-
+  @Operation(summary = "Lister les sous matieres")
   @GetMapping("/lister")
   public ResponseEntity<List<SousMatiereEssentielVM>> lister() {
     List<SousMatiereEssentielVM> lister = this.sousMatiereQueryFacade.lister();
     return ResponseEntity.ok(lister);
   }
 
+  @Operation(summary = "recuperer les sous matiere par id")
   @GetMapping("/{id}")
   public ResponseEntity<SousMatiereDetailVM> recupererParId(@PathVariable UUID id) {
     SousMatiereDetailVM sousMatiereDetailVM = this.sousMatiereQueryFacade.recupererParId(id);
     return ResponseEntity.ok(sousMatiereDetailVM);
   }
 
+  @Operation(summary = "Supprimer une sous matiere")
   @DeleteMapping("supprimer/{id}")
   @ResponseStatus(HttpStatus.OK)
   void supprimer(@PathVariable @Valid UUID id) {
     this.sousMatiereUseCaseFacade.supprimer(id);
   }
 
-  @PostMapping("/payer")
+  @Operation(summary = "Creer une sous matiere")
+  @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerSousMatiereComande commande) {
     this.sousMatiereUseCaseFacade.creer(commande);
@@ -69,6 +73,7 @@ public class SousMatiereRessource {
    *
    * @param commande commande modification d'une matiere.
    */
+  @Operation(summary = "modifier une sous matiere")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifierSousMatierCommande commande) {
     this.sousMatiereUseCaseFacade.modifier(commande);

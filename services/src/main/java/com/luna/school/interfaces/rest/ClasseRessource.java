@@ -7,6 +7,7 @@ import com.luna.school.classe.application.vm.ClasseDetailVM;
 import com.luna.school.classe.application.vm.ClasseEssentielVM;
 import com.luna.school.interfaces.facade.query.ClasseQueryFacade;
 import com.luna.school.interfaces.facade.usecase.ClasseUseCaseFacade;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -29,8 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/luna/scolaire/classe")
 public class ClasseRessource {
-private final ClasseUseCaseFacade classeUseCaseFacade;
-private final ClasseQueryFacade classeQueryFacade;
+
+  private final ClasseUseCaseFacade classeUseCaseFacade;
+  private final ClasseQueryFacade classeQueryFacade;
 
   public ClasseRessource(ClasseUseCaseFacade classeUseCaseFacade,
       ClasseQueryFacade classeQueryFacade) {
@@ -38,13 +40,14 @@ private final ClasseQueryFacade classeQueryFacade;
     this.classeQueryFacade = classeQueryFacade;
   }
 
-
+  @Operation(summary = "lister les classes")
   @GetMapping("/lister")
   public ResponseEntity<List<ClasseEssentielVM>> lister() {
     List<ClasseEssentielVM> classeEssentielVMList = this.classeQueryFacade.lister();
     return ResponseEntity.ok(classeEssentielVMList);
   }
 
+  @Operation(summary = "lister les classes par niveau")
   @GetMapping("/{niveauId}/niveau")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<List<ClasseDetailVM>> listerParNiveau(
@@ -53,24 +56,28 @@ private final ClasseQueryFacade classeQueryFacade;
     return new ResponseEntity<>(classeDetailVMS, HttpStatus.OK);
   }
 
+  @Operation(summary = "recuperer une classe par son id")
   @GetMapping("/{id}")
   public ResponseEntity<ClasseDetailVM> recupererParId(@PathVariable UUID id) {
     ClasseDetailVM classeDetailVM = this.classeQueryFacade.recupererParId(id);
     return ResponseEntity.ok(classeDetailVM);
   }
 
+  @Operation(summary = "supprimer une classe")
   @DeleteMapping("supprimer/{id}")
   @ResponseStatus(HttpStatus.OK)
   void supprimer(@PathVariable @Valid UUID id) {
     this.classeUseCaseFacade.supprimer(id);
   }
 
-  @PostMapping("/payer")
+  @Operation(summary = "creer une classe")
+  @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerClasseCommande commande) {
     this.classeUseCaseFacade.creer(commande);
   }
 
+  @Operation(summary = "modifier une classe")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifierClasseCommande commande) {
     this.classeUseCaseFacade.modifier(commande);

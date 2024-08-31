@@ -6,6 +6,7 @@ import com.luna.school.etudiant.application.vm.EtudiantDetailVM;
 import com.luna.school.etudiant.application.vm.EtudiantEssentielVM;
 import com.luna.school.etudiant.application.vm.StatistiqueVM;
 import com.luna.school.interfaces.facade.query.EtudiantQueryFacade;
+import io.swagger.v3.oas.annotations.Operation;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.http.HttpStatus;
@@ -30,14 +31,13 @@ public class EtudiantRessource {
   public EtudiantRessource(EtudiantQueryFacade etudiantQueryFacade) {
     this.etudiantQueryFacade = etudiantQueryFacade;
   }
-
-
+  @Operation(summary = "lister les etudiant")
   @GetMapping("/lister")
   public ResponseEntity<List<EtudiantEssentielVM>> lister() {
     List<EtudiantEssentielVM> lister = this.etudiantQueryFacade.lister();
     return ResponseEntity.ok(lister);
   }
-
+  @Operation(summary = "lister les etudiants par civilité")
   @GetMapping("/{civilite}/civilite")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<List<EtudiantDetailVM>> listerParCivilite(
@@ -45,13 +45,13 @@ public class EtudiantRessource {
     List<EtudiantDetailVM> etudiantDetailVMS = this.etudiantQueryFacade.listerParSexe(civilite);
     return new ResponseEntity<>(etudiantDetailVMS, HttpStatus.OK);
   }
-
+  @Operation(summary = "recuperer les etudiants par id")
   @GetMapping("/{id}")
   public ResponseEntity<EtudiantDetailVM> recupererParId(@PathVariable UUID id) {
     EtudiantDetailVM etudiantDetailVM = this.etudiantQueryFacade.recupererParId(id);
     return ResponseEntity.ok(etudiantDetailVM);
   }
-
+  @Operation(summary = "statistique")
   @GetMapping("/statistique")
   public ResponseEntity<StatistiqueVM> statistique() {
     StatistiqueVM statistique = this.etudiantQueryFacade.statistique();

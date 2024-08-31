@@ -7,6 +7,7 @@ import com.luna.school.typeenseignant.application.commande.CreerTypeEnseignantCo
 import com.luna.school.typeenseignant.application.commande.ModifierTypeEnseignantCammande;
 import com.luna.school.typeenseignant.application.vm.TypeEnseignantDatailsVM;
 import com.luna.school.typeenseignant.application.vm.TypeEnseignantEssentielVM;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -39,13 +40,14 @@ public class TypeEnseignantRessource {
     this.typeEnseignantQueryFacade = typeEnseignantQueryFacade;
   }
 
-
+  @Operation(summary = "Lister les types d'enseignant")
   @GetMapping("/lister")
   public ResponseEntity<List<TypeEnseignantEssentielVM>> lister() {
     List<TypeEnseignantEssentielVM> enseignantEssentielVMS = this.typeEnseignantQueryFacade.lister();
     return ResponseEntity.ok(enseignantEssentielVMS);
   }
 
+  @Operation(summary = "Recuperer type d'enseignant par id")
   @GetMapping("/{id}")
   public ResponseEntity<TypeEnseignantDatailsVM> recupererParId(@PathVariable UUID id) {
     TypeEnseignantDatailsVM typeEnseignantDatailsVM =
@@ -53,12 +55,14 @@ public class TypeEnseignantRessource {
     return ResponseEntity.ok(typeEnseignantDatailsVM);
   }
 
+  @Operation(summary = "Supprimer le type d'enseignant")
   @DeleteMapping("supprimer/{id}")
   @ResponseStatus(HttpStatus.OK)
   void supprimer(@PathVariable @Valid UUID id) {
     this.typeEnseignantUseCaseFacade.supprimer(id);
   }
 
+  @Operation(summary = "Creer le type d'enseignant")
   @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerTypeEnseignantCommande commande) {
@@ -70,6 +74,7 @@ public class TypeEnseignantRessource {
    *
    * @param commande commande modification d'un utilisateur connecté.
    */
+  @Operation(summary = "modifier le type d'enseignant")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifierTypeEnseignantCammande commande) {
     this.typeEnseignantUseCaseFacade.modifier(commande);

@@ -7,6 +7,7 @@ import com.luna.school.interfaces.facade.usecase.NoteUseCaseFacade;
 import com.luna.school.note.application.commande.CreerNoteCommande;
 import com.luna.school.note.application.vm.NoteDetailVM;
 import com.luna.school.note.application.vm.NoteEssentielVM;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -28,36 +29,42 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/luna/scolaire/note")
 public class NoteRessource {
-private final NoteUseCaseFacade noteUseCaseFacade;
-private final NoteQueryFacade noteQueryFacade;
+
+  private final NoteUseCaseFacade noteUseCaseFacade;
+  private final NoteQueryFacade noteQueryFacade;
 
   public NoteRessource(NoteUseCaseFacade noteUseCaseFacade, NoteQueryFacade noteQueryFacade) {
     this.noteUseCaseFacade = noteUseCaseFacade;
     this.noteQueryFacade = noteQueryFacade;
   }
 
+  @Operation(summary = "creer une note")
   @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerNoteCommande commande) {
     this.noteUseCaseFacade.creer(commande);
   }
+
+  @Operation(summary = "Lister les notes")
   @GetMapping("/lister")
   public ResponseEntity<List<NoteEssentielVM>> lister() {
     List<NoteEssentielVM> lister = this.noteQueryFacade.lister();
     return ResponseEntity.ok(lister);
   }
 
+  @Operation(summary = "lister les note de matiere d'une classe")
   @GetMapping("/classe/{classeId}/matiere/{matiereId}")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<List<NoteEssentielVM>> listerParMatiere(
       @PathVariable("classeId") UUID classeId,
       @PathVariable("matiereId") UUID matiereId) {
 
-    List<NoteEssentielVM> noteEssentielVMList = this.noteQueryFacade.listerParMatiereIdClasse(classeId, matiereId);
+    List<NoteEssentielVM> noteEssentielVMList = this.noteQueryFacade.listerParMatiereIdClasse(
+        classeId, matiereId);
     return new ResponseEntity<>(noteEssentielVMList, HttpStatus.OK);
   }
 
-
+  @Operation(summary = "recuperer note par id")
   @GetMapping("/{id}")
   public ResponseEntity<NoteDetailVM> recupererParId(@PathVariable UUID id) {
 
@@ -65,12 +72,14 @@ private final NoteQueryFacade noteQueryFacade;
     return ResponseEntity.ok(noteDetailVM);
   }
 
+  @Operation(summary = "supprimer une note")
   @DeleteMapping("supprimer/{id}")
   @ResponseStatus(HttpStatus.OK)
   void supprimer(@PathVariable @Valid UUID id) {
     this.noteUseCaseFacade.supprimer(id);
   }
 
+  @Operation(summary = "lister les note d'une classe")
   @GetMapping("/{classeId}/classe")
   @ResponseStatus(HttpStatus.OK)
   public ResponseEntity<List<NoteParMatiereVM>> listerParClasse(

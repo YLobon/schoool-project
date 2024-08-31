@@ -6,6 +6,7 @@ import com.luna.school.interfaces.facade.usecase.PermissionPersonnelUseCaseFacad
 import com.luna.school.permission.application.commande.CreerPermissionPersonnelCommande;
 import com.luna.school.permission.application.commande.ModifierPermissionPersonnelCommande;
 import com.luna.school.permission.application.vm.PermissionPersonnelVM;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -27,8 +28,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/luna/scolaire/permission-personnel")
 public class PermissionPersonnelRessource {
-private final PermissionPersonnelUseCaseFacade permissionPersonnelUseCaseFacade;
-private final PermissionPersonnelQueryFacade permissionPersonnelQueryFacade;
+
+  private final PermissionPersonnelUseCaseFacade permissionPersonnelUseCaseFacade;
+  private final PermissionPersonnelQueryFacade permissionPersonnelQueryFacade;
 
   public PermissionPersonnelRessource(
       PermissionPersonnelUseCaseFacade permissionPersonnelUseCaseFacade,
@@ -37,27 +39,27 @@ private final PermissionPersonnelQueryFacade permissionPersonnelQueryFacade;
     this.permissionPersonnelQueryFacade = permissionPersonnelQueryFacade;
   }
 
-
+  @Operation(summary = "Lister les permission du personnel")
   @GetMapping("/lister")
   public ResponseEntity<List<PermissionPersonnelVM>> lister() {
     List<PermissionPersonnelVM> permissionPersonnelVMS = this.permissionPersonnelQueryFacade.lister();
     return ResponseEntity.ok(permissionPersonnelVMS);
   }
 
+  @Operation(summary = "recuperer la permission de personnel par id")
   @GetMapping("/{id}")
   public ResponseEntity<PermissionPersonnelVM> recupererParId(@PathVariable UUID id) {
-
     PermissionPersonnelVM permissionPersonnelVM = this
         .permissionPersonnelQueryFacade.recupererParId(id);
     return ResponseEntity.ok(permissionPersonnelVM);
   }
 
-//  @DeleteMapping("supprimer/{id}")
+  //  @DeleteMapping("supprimer/{id}")
 //  @ResponseStatus(HttpStatus.OK)
 //  void supprimer(@PathVariable @Valid UUID id) {
 //    this.anneeScolaireUseCaseFacade.supprimer(id);
 //  }
-
+  @Operation(summary = "creer permission du personnel")
   @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerPermissionPersonnelCommande commande) {
@@ -69,6 +71,7 @@ private final PermissionPersonnelQueryFacade permissionPersonnelQueryFacade;
    *
    * @param commande commande modification d'un utilisateur connecté.
    */
+  @Operation(summary = "modifier permisssion du personnel")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifierPermissionPersonnelCommande commande) {
     this.permissionPersonnelUseCaseFacade.modifier(commande);

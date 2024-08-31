@@ -110,7 +110,7 @@ public class InscriptionRessourceIT extends AbstractRessourceIT {
     commande.setReleveNote(true);
 
     // When
-    var mvcResult = this.mockMvc.perform(post(API_URL + "/payer")
+    var mvcResult = this.mockMvc.perform(post(API_URL + "/creer")
         .accept(MediaType.APPLICATION_JSON_VALUE)
         .content(TestUtils.convertObjectToJsonBytes(commande))
         .contentType(MediaType.APPLICATION_JSON)).andDo(print());

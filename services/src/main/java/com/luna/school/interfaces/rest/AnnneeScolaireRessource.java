@@ -7,6 +7,7 @@ import com.luna.school.anneescolaire.application.vm.AnneeScolaireDatailsVM;
 import com.luna.school.anneescolaire.application.vm.AnneeScolaireEssentielVM;
 import com.luna.school.interfaces.facade.query.AnneeScolaireQueryFacade;
 import com.luna.school.interfaces.facade.usecase.AnneeScolaireUseCaseFacade;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -38,26 +39,28 @@ private final AnneeScolaireQueryFacade anneeScolaireQueryFacade;
     this.anneeScolaireUseCaseFacade = anneeScolaireUseCaseFacade;
     this.anneeScolaireQueryFacade = anneeScolaireQueryFacade;
   }
+  @Operation(summary = "lister les années scolaire")
   @GetMapping("/lister")
   public ResponseEntity<List<AnneeScolaireEssentielVM>> lister() {
     List<AnneeScolaireEssentielVM> permissions = this.anneeScolaireQueryFacade.lister();
     return ResponseEntity.ok(permissions);
   }
-
+  @Operation(summary = "recuperer une années scolaire par id")
   @GetMapping("/{id}")
   public ResponseEntity<AnneeScolaireDatailsVM> recupererParId(@PathVariable UUID id) {
     AnneeScolaireDatailsVM anneeScolaireDatailsVM =
         this.anneeScolaireQueryFacade.recupererParId(id);
     return ResponseEntity.ok(anneeScolaireDatailsVM);
   }
-
+  @Operation(summary = "suppriler une années scolaire")
   @DeleteMapping("supprimer/{id}")
   @ResponseStatus(HttpStatus.OK)
   void supprimer(@PathVariable @Valid UUID id) {
     this.anneeScolaireUseCaseFacade.supprimer(id);
   }
 
-  @PostMapping("/payer")
+  @Operation(summary = "créer une années scolaire")
+  @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerAnneeScolaireCommande commande) {
     this.anneeScolaireUseCaseFacade.creer(commande);
@@ -68,6 +71,7 @@ private final AnneeScolaireQueryFacade anneeScolaireQueryFacade;
    *
    * @param commande commande modification d'un utilisateur connecté.
    */
+  @Operation(summary = "modifier une années scolaire")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifierAnneeScolaireCammande commande) {
     this.anneeScolaireUseCaseFacade.modifier(commande);

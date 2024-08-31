@@ -7,6 +7,7 @@ import com.luna.school.niveau.application.commande.CreerNiveauCommande;
 import com.luna.school.niveau.application.commande.ModifierNiveauCommande;
 import com.luna.school.niveau.application.vm.NiveauDetailsVM;
 import com.luna.school.niveau.application.vm.NiveauEssentielVM;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -38,31 +39,35 @@ public class NiveauRessource {
     this.niveauQueryFacade = niveauQueryFacade;
   }
 
-
+  @Operation(summary = "lister les niveau")
   @GetMapping("/lister")
   public ResponseEntity<List<NiveauEssentielVM>> lister() {
     List<NiveauEssentielVM> niveauEssentielVM = this.niveauQueryFacade.lister();
     return ResponseEntity.ok(niveauEssentielVM);
   }
 
+  @Operation(summary = "recuperer le niveau par id")
   @GetMapping("/{id}")
   public ResponseEntity<NiveauDetailsVM> recupererParId(@PathVariable UUID id) {
     NiveauDetailsVM niveauDetailsVM = this.niveauQueryFacade.recupererParId(id);
     return ResponseEntity.ok(niveauDetailsVM);
   }
 
+  @Operation(summary = "supprimer le niveau")
   @DeleteMapping("supprimer/{id}")
   @ResponseStatus(HttpStatus.OK)
   void supprimer(@PathVariable @Valid UUID id) {
     this.niveauCaseFacade.supprimer(id);
   }
 
-  @PostMapping("/payer")
+  @Operation(summary = "creer niveau")
+  @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerNiveauCommande commande) {
     this.niveauCaseFacade.creer(commande);
   }
 
+  @Operation(summary = "modifier le niveau")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifierNiveauCommande commande) {
     this.niveauCaseFacade.modifier(commande);

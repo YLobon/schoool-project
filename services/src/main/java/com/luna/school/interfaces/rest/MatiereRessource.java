@@ -8,6 +8,7 @@ import com.luna.school.matiere.application.commande.CreerMatiereCommande;
 import com.luna.school.matiere.application.commande.ModifiereMatierCommande;
 import com.luna.school.matiere.application.vm.MatiereDetailVM;
 import com.luna.school.matiere.application.vm.MatiereEssentielVM;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.UUID;
@@ -40,31 +41,35 @@ public class MatiereRessource {
     this.matiereQueryFacade = matiereQueryFacade;
   }
 
-
+  @Operation(summary = "lister les matieres")
   @GetMapping("/lister")
   public ResponseEntity<List<MatiereEssentielVM>> lister() {
     List<MatiereEssentielVM> essentielVMList = this.matiereQueryFacade.lister();
     return ResponseEntity.ok(essentielVMList);
   }
 
+  @Operation(summary = "recuperer matiere par id")
   @GetMapping("/{id}")
   public ResponseEntity<MatiereDetailVM> recupererParId(@PathVariable UUID id) {
     MatiereDetailVM matiereDetailVM = this.matiereQueryFacade.recupererParId(id);
     return ResponseEntity.ok(matiereDetailVM);
   }
 
+  @Operation(summary = "suprimer une matiere")
   @DeleteMapping("supprimer/{id}")
   @ResponseStatus(HttpStatus.OK)
   void supprimer(@PathVariable @Valid UUID id) {
     this.matiereUseCaseFacade.supprimer(id);
   }
 
-  @PostMapping("/payer")
+  @Operation(summary = "creer une matiere")
+  @PostMapping("/creer")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody CreerMatiereCommande commande) {
     this.matiereUseCaseFacade.creer(commande);
   }
 
+  @Operation(summary = "associer une sous matiere à la  matiere")
   @PostMapping("/ajouter")
   @ResponseStatus(HttpStatus.CREATED)
   public void creer(@Valid @RequestBody AssocierSousMatiereAuMatiereCommande commande) {
@@ -76,6 +81,7 @@ public class MatiereRessource {
    *
    * @param commande commande modification d'une matiere.
    */
+  @Operation(summary = "modifier une matiere")
   @PutMapping("/modifier")
   public void modifier(@Valid @RequestBody ModifiereMatierCommande commande) {
     this.matiereUseCaseFacade.modifier(commande);
